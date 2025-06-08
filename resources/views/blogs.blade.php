@@ -1,6 +1,17 @@
 @extends('template.main')
 
 @section('content')
+    <div class="card-body">
+        @if(session('delete'))
+            <div class="alert alert-success">
+                {{ session('delete') }}
+            </div>
+        @elseif(session('restore'))
+            <div class="alert alert-success">
+                {{ session('restore') }}
+            </div>
+        @endif
+    </div>
     <div class="container">
         <div class="row">
             @foreach ($blogs as $blog)
@@ -13,6 +24,14 @@
                         @if ($blog->status == 'Published')
                             <a href="/blogs/{{ $blog->id }}" class="card-link">Go to blog</a>
                             <a href="#" class="card-link">Edit blog (temp)</a>
+                        @elseif ($blog->status == 'Deleted')
+                            <span class="text-danger">Deleted</span>
+                            <form action="{{ route('blogs.restore', $blog->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to restore this blog?');">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="btn btn-link p-0 m-0 align-baseline">(restore)</button>
+                            </form>
+
                         @else
                             <span>{{ $blog->status }}</span>
                         @endif

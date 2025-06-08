@@ -88,7 +88,8 @@ Route::group(['prefix' => 'blog'], function() {
 Route::get('statuses', [StatusesController::class, 'index']);
 
 Route::group(['prefix' => 'blogs'], function() {
-    Route::get('/', [BlogController::class, 'retrieveBlogs']);
+    Route::get('/', [BlogController::class, 'retrieveBlogs'])->name('blogs.index');
     Route::get('/{id}', [BlogController::class, 'retrieveBlogPage']); 
     Route::delete('/{id}/delete', [BlogController::class, 'softDeleteBlogPage'])->name('blogs.softDelete');
+    Route::patch('/{id}/restore', [BlogController::class, 'restoreBlogPage'])->name('blogs.restore');
 });

@@ -119,7 +119,7 @@ class BlogController extends Controller
         // return MyBlog::all();
         // $blog = Blog::find('1445');
         // return $blog->title . " - " . $blog->description;
-        // return Blog::findorFail('4');
+        // return Blog::findOrFail('4');
         // $post = Blog::where('status_id', 2)
         //     // WHERE category_id = 2
         //     // ->where('category_id', 2)
@@ -128,20 +128,30 @@ class BlogController extends Controller
 
         // return $post;
 
-        // $post = Blog::findorFail(1449)->delete();
+        // $post = Blog::findOrFail(1449)->delete();
         // return $post;
 
         $this->softDeleteBlogPage(1449);
     }
 
     public function retrieveBlogPage($id) {
-        $blog = Blog::findorFail($id);
+        $blog = Blog::findOrFail($id);
         return view('blogPage', compact('blog'));
     }
 
     public function softDeleteBlogPage($id) {
         // Blog::onlyTrashed()->findorFail($id)->forceDelete();
         Blog::where('id', $id)->update(['status_id' => 3]);
-        Blog::findorFail($id)->delete();
+        Blog::findOrFail($id)->delete();
+        return redirect()->route('blogs.index')->with('delete', 'Blog deleted successfully!');
+    }
+
+    public function restoreBlogPage($id) {
+        $blog = Blog::onlyTrashed()->findOrFail($id);
+        $blog->restore();
+
+        $blog->status_id = 2;
+        $blog->save();
+        return redirect()->route('blogs.index')->with('restore', 'Blog restored successfully!');
     }
 }
