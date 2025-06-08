@@ -48,7 +48,7 @@ class BlogController extends Controller
         $blogs = DB::table('blogs as b')
             ->join('categories as c', 'c.id', '=', 'b.category_id')
             ->join('statuses as s', 's.id', '=', 'b.status_id')
-            ->select('b.title as title', 's.name as status', 'c.name as category', 'b.description as description')
+            ->select('b.id as id', 'b.title as title', 's.name as status', 'c.name as category', 'b.description as description')
             ->get();
 
         return view('blogs', compact('blogs'));
@@ -131,11 +131,17 @@ class BlogController extends Controller
         // $post = Blog::findorFail(1449)->delete();
         // return $post;
 
-        $this->softDelete(1449);
+        $this->softDeleteBlogPage(1449);
     }
 
-    public function softDelete($id) {
+    public function retrieveBlogPage($id) {
+        $blog = Blog::findorFail($id);
+        return view('blogPage', compact('blog'));
+    }
+
+    public function softDeleteBlogPage($id) {
         // Blog::onlyTrashed()->findorFail($id)->forceDelete();
-        Blog::onlyTrashed()->findorFail($id)->restore();
+        Blog::where('id', $id)->update(['status_id' => 3]);
+        Blog::findorFail($id)->delete();
     }
 }
