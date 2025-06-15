@@ -9,6 +9,7 @@ use App\Http\Requests\BlogRequest;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Status;
+use App\Models\Tag;
 
 class BlogController extends Controller
 {
@@ -73,6 +74,10 @@ class BlogController extends Controller
         $post->author_id = 1;
         $post->save();
 
+        if (!empty('tags')) {
+            $post->tags()->sync($request->input('tags', []));
+        }
+
         // dd($post->id);
 
         return redirect()->route('blog.index')->with('success', 'Blog created successfully!');
@@ -87,9 +92,11 @@ class BlogController extends Controller
         //     ->get();
         $statuses = Status::all();
 
+        $tags = Tag::all();
+
         $blogs = Blog::withTrashed()->with('category', 'status', 'tags', 'author')->get();
 
-        return view('createBlog', compact('categories', 'statuses', 'blogs'));
+        return view('createBlog', compact('categories', 'statuses', 'tags', 'blogs'));
     }
 
     public function getBlog() {
