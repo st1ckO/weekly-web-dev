@@ -45,11 +45,13 @@ class BlogController extends Controller
         //     ['title' => 'Title 5', 'body' => 'Body 5', 'status' => 1],
         //     ['title' => 'Title 6', 'body' => 'Body 6', 'status' => 0],
         // ];
-        $blogs = DB::table('blogs as b')
-            ->join('categories as c', 'c.id', '=', 'b.category_id')
-            ->join('statuses as s', 's.id', '=', 'b.status_id')
-            ->select('b.id as id', 'b.title as title', 's.name as status', 'c.name as category', 'b.description as description')
-            ->get();
+        // $blogs = DB::table('blogs as b')
+        //     ->join('categories as c', 'c.id', '=', 'b.category_id')
+        //     ->join('statuses as s', 's.id', '=', 'b.status_id')
+        //     ->select('b.id as id', 'b.title as title', 's.name as status', 'c.name as category', 'b.description as description')
+        //     ->get();
+
+        $blogs = Blog::withTrashed()->with('category', 'status')->get();
 
         return view('blogs', compact('blogs'));
     }
@@ -85,7 +87,9 @@ class BlogController extends Controller
         //     ->get();
         $statuses = Status::all();
 
-        return view('createBlog', compact('categories', 'statuses'));
+        $blogs = Blog::withTrashed()->with('category', 'status', 'tags', 'author')->get();
+
+        return view('createBlog', compact('categories', 'statuses', 'blogs'));
     }
 
     public function getBlog() {
