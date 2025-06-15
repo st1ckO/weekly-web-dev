@@ -79,11 +79,11 @@ class BlogController extends Controller
     public function createBlogIndex() {
         // $categories = DB::table('categories')
         //     ->get();
-        $categories = Category::get();
+        $categories = Category::all();
 
         // $statuses = DB::table('statuses')
         //     ->get();
-        $statuses = Status::get();
+        $statuses = Status::all();
 
         return view('createBlog', compact('categories', 'statuses'));
     }
@@ -153,5 +153,29 @@ class BlogController extends Controller
         $blog->status_id = 2;
         $blog->save();
         return redirect()->route('blogs.index')->with('restore', 'Blog restored successfully!');
+    }
+
+    public function oneToOneRel() {
+        $blogs = Blog::with('category', 'status')->get();
+        return $blogs;
+    }
+    
+    public function oneToManyRel() {
+        // $categories = Category::with('blog')->find(2);
+        $categories = Category::with('blog')->get();
+        return $categories;
+    }
+
+    public function manyToManyRel() {
+        $tags = Blog::with('tags')->get();
+        return $tags;
+    }
+
+    public function insertTags() {
+        $blog = Blog::findOrFail(1445);
+
+        $blog->tags()->attach([1, 2, 3]);
+
+        return $blog;
     }
 }

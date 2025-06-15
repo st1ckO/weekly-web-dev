@@ -83,6 +83,10 @@ Route::group(['prefix' => 'blog'], function() {
     Route::get('/get', [BlogController::class, 'getBlog']);
     Route::get('/update', [BlogController::class, 'updateBlog']);
     Route::get('/model', [BlogController::class, 'blogModel']);
+    Route::get('/hasOne', [BlogController::class, 'oneToOneRel']);
+    Route::get('/hasMany', [BlogController::class, 'oneToManyRel']);
+    Route::get('/many', [BlogController::class, 'manyToManyRel']);
+    Route::get('/insertTags', [BlogController::class, 'insertTags']);
 });
 
 Route::get('statuses', [StatusesController::class, 'index']);
