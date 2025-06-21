@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\BlogRequest;
 use App\Models\Blog;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Status;
 use App\Models\Tag;
+use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
@@ -188,5 +190,16 @@ class BlogController extends Controller
         $blog->tags()->attach([1, 2, 3]);
 
         return $blog;
+    }
+
+    public function postComment(Request $request, Blog $blog) {
+        $post = new Comment();
+
+        $post->blog_id = $blog->id;
+        $post->user_id = 1; # HARD CODED VALUE
+        $post->comment = $request->comment;
+        $post->save();
+
+        return redirect()->back();
     }
 }

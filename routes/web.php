@@ -96,4 +96,5 @@ Route::group(['prefix' => 'blogs'], function() {
     Route::get('/{id}', [BlogController::class, 'retrieveBlogPage']); 
     Route::delete('/{id}/delete', [BlogController::class, 'softDeleteBlogPage'])->name('blogs.softDelete');
     Route::patch('/{id}/restore', [BlogController::class, 'restoreBlogPage'])->name('blogs.restore');
+    Route::post('/{blog}/comment', [BlogController::class, 'postComment'])->name('blogs.comment');
 });

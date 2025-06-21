@@ -26,4 +26,8 @@ class Blog extends Model
     public function author() {
         return $this->hasOne(User::class, 'id', 'author_id');
     }
+
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
 }
