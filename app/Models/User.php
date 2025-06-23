@@ -45,4 +45,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function likedComments() {
+        return $this->belongsToMany(Comment::class, 'comment_likes', 'user_id', 'comment_id');
+    }
 }

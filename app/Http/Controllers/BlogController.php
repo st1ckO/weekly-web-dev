@@ -9,9 +9,11 @@ use App\Http\Requests\BlogRequest;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\CommentLike;
 use App\Models\Status;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
 {
@@ -196,9 +198,16 @@ class BlogController extends Controller
         $post = new Comment();
 
         $post->blog_id = $blog->id;
-        $post->user_id = 1; # HARD CODED VALUE
+        $post->user_id = 1; // HARD CODED TEST USER
         $post->comment = $request->comment;
         $post->save();
+
+        return redirect()->back();
+    }
+
+    public function toggleLike(Comment $comment) {
+        $userId = 1; // HARD CODED TEST USER
+        $comment->toggleLikeByUserId($userId);
 
         return redirect()->back();
     }
